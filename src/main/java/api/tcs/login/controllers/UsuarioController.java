@@ -16,6 +16,7 @@ import api.tcs.login.dtos.models.UsuarioDto;
 import api.tcs.login.models.JsonMessage;
 import api.tcs.login.models.Usuario;
 import api.tcs.login.services.UsuarioService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -25,7 +26,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<?> createUsuario(@RequestBody UsuarioDto usuarioDto){
+    public ResponseEntity<?> createUsuario(@RequestBody @Valid UsuarioDto usuarioDto){
         this.usuarioService.createUsuario(usuarioDto);
         return ResponseEntity.ok().body(new JsonMessage("Sucesso ao cadastrar usuario"));
     }
@@ -36,7 +37,7 @@ public class UsuarioController {
     }
 
     @PutMapping
-    public UsuarioDto updateUsuario(Authentication authentication, @RequestBody UsuarioDto usuarioDto){
+    public UsuarioDto updateUsuario(Authentication authentication, @RequestBody @Valid UsuarioDto usuarioDto){
         return this.usuarioService.updateUsuario(((Usuario)authentication.getPrincipal()).getId(), usuarioDto, ((Usuario)authentication.getPrincipal()).getEmail());
     }
 

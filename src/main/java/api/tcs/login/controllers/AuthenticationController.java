@@ -13,6 +13,7 @@ import api.tcs.login.models.JsonMessage;
 import api.tcs.login.models.Usuario;
 import api.tcs.login.services.AuthenticationService;
 import api.tcs.login.services.JwtService;
+import jakarta.validation.Valid;
 
 @RestController
 public class AuthenticationController {
@@ -24,7 +25,7 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public LoginResponseDto login(@RequestBody LoginDto loginDto) {
+    public LoginResponseDto login(@RequestBody @Valid LoginDto loginDto) {
         Usuario authenticatedUsuario = authenticationService.authenticate(loginDto.usuarioObject());
         System.out.println(authenticatedUsuario);
         return LoginResponseDto.loginDto(jwtService.generateToken(authenticatedUsuario));

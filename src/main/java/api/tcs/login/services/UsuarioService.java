@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import api.tcs.login.dtos.mappers.UsuarioMapper;
 import api.tcs.login.dtos.models.UsuarioDto;
-import api.tcs.login.exceptions.DuplicateEntryException;
+import api.tcs.login.exceptions.IncompleteDtoException;
 import api.tcs.login.models.Usuario;
 import api.tcs.login.repositories.UsuarioRepository;
 
@@ -25,17 +25,23 @@ public class UsuarioService {
 
     private Usuario usuario;
 
+    private String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+
     public UsuarioService(){
         passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public UsuarioDto createUsuario(UsuarioDto usuarioDto){
         this.usuario = usuarioMapper.usuarioDtoToUsuario(usuarioDto);
-        this.usuario.setSenha(passwordEncoder.encode(this.usuario.getPassword()));
         try{
+            String email = this.usuario.getEmail();
+            if(email.isBlank() || !email.matches(emailRegex)){
+                throw new DataIntegrityViolationException("Email fora do padrão");
+            }
+            this.usuario.setSenha(passwordEncoder.encode(this.usuario.getPassword()));
             return usuarioMapper.usuarioToUsuarioDto(this.usuarioRepository.save(usuario));
         }catch(DataIntegrityViolationException e){
-            throw new DuplicateEntryException("Usuarioname already registered!");
+            throw new IncompleteDtoException();
         }
     }
 
