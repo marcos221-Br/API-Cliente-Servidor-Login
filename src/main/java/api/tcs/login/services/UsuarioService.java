@@ -38,6 +38,9 @@ public class UsuarioService {
             if(email.isBlank() || !email.matches(emailRegex)){
                 throw new DataIntegrityViolationException("Email fora do padrão");
             }
+            if(this.usuario.getPassword().length() < 8 || this.usuario.getPassword().length() > 31){
+                throw new DataIntegrityViolationException("Senha não confere com os requisitos minímos");
+            }
             this.usuario.setSenha(passwordEncoder.encode(this.usuario.getPassword()));
             return usuarioMapper.usuarioToUsuarioDto(this.usuarioRepository.save(usuario));
         }catch(DataIntegrityViolationException e){
@@ -53,6 +56,9 @@ public class UsuarioService {
         this.usuario = usuarioMapper.usuarioDtoToUsuario(usuarioDto);
         this.usuario.setId(id);
         this.usuario.setEmail(email);
+        if(this.usuario.getPassword().length() < 8 || this.usuario.getPassword().length() > 31){
+           throw new IncompleteDtoException();
+        }
         this.usuario.setSenha(passwordEncoder.encode(this.usuario.getPassword()));
         return usuarioMapper.usuarioToUsuarioDto(this.usuarioRepository.save(usuario));
     }

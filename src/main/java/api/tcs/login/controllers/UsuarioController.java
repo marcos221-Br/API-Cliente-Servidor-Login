@@ -28,7 +28,7 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<?> createUsuario(@RequestBody @Valid UsuarioDto usuarioDto){
         this.usuarioService.createUsuario(usuarioDto);
-        return ResponseEntity.ok().body(new JsonMessage("Sucesso ao cadastrar usuario"));
+        return ResponseEntity.status(201).body(new JsonMessage("Sucesso ao cadastrar usuario"));
     }
 
     @GetMapping
