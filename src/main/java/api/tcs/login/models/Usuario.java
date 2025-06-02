@@ -33,7 +33,7 @@ public class Usuario implements UserDetails{
     private String nome;
 
     @Basic(optional = false)
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = true, unique = true)
     private String email;
 
     @Basic(optional = false)

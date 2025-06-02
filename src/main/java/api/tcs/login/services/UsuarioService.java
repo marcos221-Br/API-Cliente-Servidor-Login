@@ -65,6 +65,7 @@ public class UsuarioService {
 
     public void deleteUsuario(String email){
         this.usuario = this.usuarioRepository.findByEmail(email).get();
+        this.usuario.setEmail(null);
         this.usuario.setEnabled(false);
         this.usuarioRepository.save(this.usuario);
     }
