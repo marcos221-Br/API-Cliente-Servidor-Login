@@ -27,7 +27,8 @@ public class RascunhoController {
     @PostMapping
     public ResponseEntity<?> createRascunho(@RequestBody RascunhoDto rascunhoDto, HttpServletRequest request){
         try{
-            return this.rascunhoClient.createRascunho(request.getHeader("Authorization"), rascunhoDto);
+            ResponseEntity<?> response = this.rascunhoClient.createRascunho(request.getHeader("Authorization"), rascunhoDto);
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         } catch (FeignException e) {
             HttpStatus status = HttpStatus.valueOf(e.status());
             String body = e.contentUTF8();
@@ -38,7 +39,8 @@ public class RascunhoController {
     @PutMapping
     public ResponseEntity<?> updateRascunho(@RequestBody RascunhoDto rascunhoDto, HttpServletRequest request){
         try{
-            return this.rascunhoClient.updateRascunho(request.getHeader("Authorization"), rascunhoDto);
+            ResponseEntity<?> response = this.rascunhoClient.updateRascunho(request.getHeader("Authorization"), rascunhoDto);
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         } catch (FeignException e) {
             HttpStatus status = HttpStatus.valueOf(e.status());
             String body = e.contentUTF8();
@@ -49,7 +51,8 @@ public class RascunhoController {
     @GetMapping
     public ResponseEntity<?> getAllRascunhosUsuario(HttpServletRequest request){
         try{
-            return this.rascunhoClient.getAllRascunhosUsuario(request.getHeader("Authorization"));
+            ResponseEntity<?> response = this.rascunhoClient.getAllRascunhosUsuario(request.getHeader("Authorization"));
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         } catch (FeignException e) {
             HttpStatus status = HttpStatus.valueOf(e.status());
             String body = e.contentUTF8();
@@ -60,7 +63,8 @@ public class RascunhoController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getRascunho(@PathVariable Integer id, HttpServletRequest request){
         try{
-            return this.rascunhoClient.getRascunho(request.getHeader("Authorization"), id);
+            ResponseEntity<?> response = this.rascunhoClient.getRascunho(request.getHeader("Authorization"), id);
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         } catch (FeignException e) {
             HttpStatus status = HttpStatus.valueOf(e.status());
             String body = e.contentUTF8();
@@ -71,7 +75,8 @@ public class RascunhoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRascunho(@PathVariable Integer id, HttpServletRequest request){
         try{
-            return this.rascunhoClient.deleteRascunho(request.getHeader("Authorization"), id);
+            ResponseEntity<?> response = this.rascunhoClient.deleteRascunho(request.getHeader("Authorization"), id);
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         } catch (FeignException e) {
             HttpStatus status = HttpStatus.valueOf(e.status());
             String body = e.contentUTF8();

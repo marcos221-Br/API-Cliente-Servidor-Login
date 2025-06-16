@@ -26,7 +26,8 @@ public class EmailController {
     @PostMapping
     public ResponseEntity<?> sendEmail(@RequestBody EmailDto emailDto, HttpServletRequest request){
         try{
-            return this.emailClient.sendEmail(request.getHeader("Authorization"), emailDto);
+            ResponseEntity<?> response =  this.emailClient.sendEmail(request.getHeader("Authorization"), emailDto);
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         } catch (FeignException e) {
             HttpStatus status = HttpStatus.valueOf(e.status());
             String body = e.contentUTF8();
@@ -37,7 +38,8 @@ public class EmailController {
     @PostMapping("/{id}")
     public ResponseEntity<?> sendRascunho(@PathVariable Integer id, HttpServletRequest request){
         try{
-            return this.emailClient.sendRascunho(request.getHeader("Authorization"), id);
+            ResponseEntity<?> response =  this.emailClient.sendRascunho(request.getHeader("Authorization"), id);
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         } catch (FeignException e) {
             HttpStatus status = HttpStatus.valueOf(e.status());
             String body = e.contentUTF8();
@@ -48,7 +50,8 @@ public class EmailController {
     @PutMapping("/{id}")
     public ResponseEntity<?> getEmail(@PathVariable Integer id, HttpServletRequest request){
         try{
-            return this.emailClient.getEmail(request.getHeader("Authorization"), id);
+            ResponseEntity<?> response =  this.emailClient.getEmail(request.getHeader("Authorization"), id);
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         } catch (FeignException e) {
             HttpStatus status = HttpStatus.valueOf(e.status());
             String body = e.contentUTF8();
@@ -59,7 +62,8 @@ public class EmailController {
     @GetMapping
     public ResponseEntity<?> getAllEmails(HttpServletRequest request){
         try{
-            return this.emailClient.getAllEmails(request.getHeader("Authorization"));
+            ResponseEntity<?> response =  this.emailClient.getAllEmails(request.getHeader("Authorization"));
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         } catch (FeignException e) {
             HttpStatus status = HttpStatus.valueOf(e.status());
             String body = e.contentUTF8();
