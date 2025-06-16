@@ -1,0 +1,5 @@
+Necessário banco mysql e redis.
+
+Colocar os dados necessários no application.properties.
+
+Utilizar java 24
