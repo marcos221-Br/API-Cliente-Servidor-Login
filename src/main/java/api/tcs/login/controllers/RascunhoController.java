@@ -36,10 +36,10 @@ public class RascunhoController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateRascunho(@RequestBody RascunhoDto rascunhoDto, HttpServletRequest request){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateRascunho(@PathVariable Integer id, @RequestBody RascunhoDto rascunhoDto, HttpServletRequest request){
         try{
-            ResponseEntity<?> response = this.rascunhoClient.updateRascunho(request.getHeader("Authorization"), rascunhoDto);
+            ResponseEntity<?> response = this.rascunhoClient.updateRascunho(request.getHeader("Authorization"), id, rascunhoDto);
             return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
         } catch (FeignException e) {
             HttpStatus status = HttpStatus.valueOf(e.status());

@@ -18,8 +18,8 @@ public interface RascunhoClient {
     @PostMapping
     ResponseEntity<?> createRascunho(@RequestHeader("Authorization") String token, @RequestBody RascunhoDto rascunhoDto);
 
-    @PutMapping
-    ResponseEntity<?> updateRascunho(@RequestHeader("Authorization") String token, @RequestBody RascunhoDto rascunhoDto);
+    @PutMapping("/{id}")
+    ResponseEntity<?> updateRascunho(@RequestHeader("Authorization") String token, @PathVariable Integer id, @RequestBody RascunhoDto rascunhoDto);
 
     @GetMapping
     ResponseEntity<?> getAllRascunhosUsuario(@RequestHeader("Authorization") String token);
