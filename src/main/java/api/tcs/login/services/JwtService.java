@@ -1,9 +1,12 @@
 package api.tcs.login.services;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -33,11 +36,15 @@ public class JwtService {
         this.redisTemplate = redisTemplate;
     }
 
-    public void blackListToken(String token){
-        redisTemplate.opsForValue().set(token, "blacklisted", expirationTime, TimeUnit.MILLISECONDS);
+    public void whitelistToken(String token){
+        redisTemplate.opsForValue().set(token, "whitelisted", expirationTime, TimeUnit.MILLISECONDS);
     }
 
-    public boolean isTokenBlacklisted(String token){
+    public void removeWhitelistToken(String token){
+        redisTemplate.opsForValue().getAndDelete(token);
+    }
+
+    public boolean isTokenWhitelisted(String token){
         return redisTemplate.hasKey(token);
     }
 
@@ -71,24 +78,29 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    private boolean isTokenExpired(String token) {
-        try {
-            return extractExpiration(token).before(new Date());
-        } catch (NullPointerException e) {
-            return true;
-        }
-    }
-
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token) && !isTokenBlacklisted(token);
+        return username.equals(userDetails.getUsername()) && isTokenWhitelisted(token);
     }
 
     public long getExpirationTime(){
         return this.expirationTime;
+    }
+
+    public List<String> getLoggedUsers(){
+        Set<String> allKeys = redisTemplate.keys("*");
+        List<String> filtredKeys = new ArrayList<>();
+
+        try{
+            for(String key : allKeys){
+                if(!key.startsWith("pcp:")){
+                    filtredKeys.add(extractUsername(key));
+                }
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+        return filtredKeys;
     }
 }

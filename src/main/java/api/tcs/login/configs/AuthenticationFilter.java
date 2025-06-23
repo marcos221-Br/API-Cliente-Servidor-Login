@@ -54,7 +54,7 @@ public class AuthenticationFilter extends OncePerRequestFilter{
             return;
         }
 
-        if (path.startsWith("/api/login") || (path.startsWith("/api/usuarios") && method.equals("POST")) || path.startsWith("/api/eureka")) {
+        if (path.startsWith("/api/login") || (path.startsWith("/api/usuarios") && method.equals("POST")) || path.startsWith("/api/logged")) {
             filterChain.doFilter(request, response);
             return;
         }

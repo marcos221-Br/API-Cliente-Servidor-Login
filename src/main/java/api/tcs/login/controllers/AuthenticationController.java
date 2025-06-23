@@ -2,6 +2,7 @@ package api.tcs.login.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -27,13 +28,19 @@ public class AuthenticationController {
     @PostMapping("/login")
     public LoginResponseDto login(@RequestBody @Valid LoginDto loginDto) {
         Usuario authenticatedUsuario = authenticationService.authenticate(loginDto.usuarioObject());
-        System.out.println(authenticatedUsuario);
-        return LoginResponseDto.loginDto(jwtService.generateToken(authenticatedUsuario));
+        var token = jwtService.generateToken(authenticatedUsuario);
+        jwtService.whitelistToken(token);
+        return LoginResponseDto.loginDto(token);
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String authorizationHeader){
-        jwtService.blackListToken(authorizationHeader.substring(7));
+        jwtService.removeWhitelistToken(authorizationHeader.substring(7));
         return ResponseEntity.ok().body(new JsonMessage("Logout realizado com sucesso"));
+    }
+
+    @GetMapping("/logged")
+    public ResponseEntity<?> logged(){
+        return ResponseEntity.ok().body(new JsonMessage(jwtService.getLoggedUsers()));
     }
 }

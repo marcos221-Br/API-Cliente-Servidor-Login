@@ -26,7 +26,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeConfig -> {
-            authorizeConfig.requestMatchers("/login").permitAll().requestMatchers(HttpMethod.POST, "/usuarios").permitAll().requestMatchers("/eureka/**").permitAll().anyRequest().authenticated();
+            authorizeConfig.requestMatchers("/login").permitAll().requestMatchers("/logged").permitAll().requestMatchers(HttpMethod.POST, "/usuarios").permitAll().requestMatchers("/eureka/**").permitAll().anyRequest().authenticated();
         }).sessionManagement(
             management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ).authenticationProvider(authenticationProvider).addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class).csrf(
