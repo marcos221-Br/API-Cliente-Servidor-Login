@@ -41,7 +41,7 @@ public class JwtService {
     }
 
     public void removeWhitelistToken(String token){
-        redisTemplate.opsForValue().getAndDelete(token);
+        redisTemplate.delete(token);
     }
 
     public boolean isTokenWhitelisted(String token){
